@@ -1,0 +1,154 @@
+.ot-textchat {
+  font-family: sans-serif;
+  background-color: #F1F1F1;
+  position: relative;
+}
+
+.ot-textchat * {
+  margin: 0;
+  padding: 0;
+}
+
+.ot-textchat .ot-bubbles {
+  margin-bottom: 1rem;
+  position: absolute;
+  top: 0;
+}
+
+/*
+ * By default, normal bubbles are bubbles from the other participants and
+ * the special case is the local participan.
+ */
+.ot-textchat .ot-bubble {
+  background-color: #A186BE;
+  color: #FFF;
+  margin-left: 0.7rem;
+  border-bottom: 0.2rem solid #DDD;
+  white-space: nowrap;
+}
+
+/* Centering triangle with bubble contents */
+.ot-textchat .ot-bubble:before,
+.ot-textchat .ot-bubble:after,
+.ot-textchat .ot-bubble > div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ot-textchat .ot-bubble > div {
+  width: calc(100% - 1.2rem - 2rem);
+  position: relative;
+  left: -0.8rem;
+  padding: 1rem 2rem 1rem 1.2rem;
+  white-space: normal;
+}
+
+/*
+ * To keep the start of the text and the end aligned, we keep the width
+ * but reducing the right padding so we "free" some space at right.
+ */
+.ot-textchat .ot-bubble.mine > div {
+  width: calc(100% - 1.2rem - 2rem);
+  background-color: #FFF;
+  color: #444;
+  padding-right: 1rem;
+}
+
+/* The left triangle */
+.ot-textchat .ot-bubble:before {
+  content: "";
+  /* triangle */
+  border: 0.6rem solid transparent;
+  border-left: none;
+  border-right-width: 0.8rem;
+  border-right-color: #A186BE;
+  /* move outside the box */
+  position: relative;
+  left: -0.7rem;
+}
+
+/*
+ * Simply hide (not destroy) the left triangle to simplify stylizing the
+ * content.
+ */
+.ot-textchat .ot-bubble.mine:before {
+  border-color: transparent;
+}
+
+/* The right triangle */
+.ot-textchat .ot-bubble.mine:after {
+  content: "";
+  /* triangle */
+  border: 0.6rem solid transparent;
+  border-right: none;
+  border-left-width: 0.8rem;
+  border-left-color: #FFF;
+  /* move outside the box */
+  position: relative;
+  right: 0.8rem;
+}
+
+.ot-textchat .ot-bubble-header {
+  font-size: 1.1em;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+.ot-textchat .ot-message-sender {
+  float: left;
+}
+
+.ot-textchat .ot-message-timestamp {
+  float: right;
+}
+
+.ot-textchat .ot-input {
+  position: relative;
+  margin: 0 1rem;
+}
+
+.ot-textchat .ot-composer {
+  padding: 1rem;
+  height: 6rem;
+  background-color: #fff;
+  box-sizing: border-box;
+  line-height: 2rem;
+  outline: none;
+  overflow: auto;
+  max-height: 10rem;
+}
+
+.ot-textchat .ot-error-zone {
+  color: #D00;
+  background-color: #FFF2F2;
+  border: 1px solid #D00;
+  padding: 1rem;
+}
+
+.ot-textchat .ot-bottom-line {
+  overflow: auto;
+  color: #949494;
+}
+
+.ot-textchat .ot-character-counter {
+  float: left;
+  margin: 1rem 0;
+}
+
+.ot-textchat .ot-character-counter.error {
+  color: #D00;
+}
+
+.ot-textchat .ot-send-button {
+  background: none;
+  border: none;
+  outline: none;
+  float: right;
+  margin: 1rem 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.ot-textchat .ot-send-button[disabled] {
+  color: #C1C1C1;
+}

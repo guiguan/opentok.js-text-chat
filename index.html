@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>OpenTok TextChat demo</title>
+    <link rel="stylesheet" href="./css/opentok-textchat.css" />
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+    <script src="dist/opentok-textchat.js"></script>
+    <style>
+      #chat {
+        border: 1px solid black;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 50%;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="connected-as">
+      <button onclick="connect(tokenAlice);">Connect as Alice</button>
+      <button onclick="connect(tokenBob);">Connect as Bob</button>
+    </section>
+    <section id="chat"></section>
+    <script>
+      var sessionId = '2_MX40NTMyNzQ4Mn5-MTQ0Mjg2MTEzMDY0MH51UW5rWlppeTBJMUp0VDJwOExSL3hFWEl-UH4';
+      var apiKey = '45327482';
+      var tokenAlice = 'T1==cGFydG5lcl9pZD00NTMyNzQ4MiZzaWc9MTU1YTRhOTNiMDk1MDVhNjgwOTE1YjU2YWIxMjBjZDczMDI4NjhkZTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UTXlOelE0TW41LU1UUTBNamcyTVRFek1EWTBNSDUxVVc1cldscHBlVEJKTVVwMFZESndPRXhTTDNoRldFbC1VSDQmY3JlYXRlX3RpbWU9MTQ0Mjg2MTE3MyZub25jZT0wLjU2OTUxOTEzMTI2ODM1OTImZXhwaXJlX3RpbWU9MTQ0NTQ1MzEwNiZjb25uZWN0aW9uX2RhdGE9QWxpY2U=';
+      var tokenBob = 'T1==cGFydG5lcl9pZD00NTMyNzQ4MiZzaWc9MzE5MzQwZGY5YmVjOTBlZjZkOGIxMGQzNDViYjBkZTk0MDhmMWQwNjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UTXlOelE0TW41LU1UUTBNamcyTVRFek1EWTBNSDUxVVc1cldscHBlVEJKTVVwMFZESndPRXhTTDNoRldFbC1VSDQmY3JlYXRlX3RpbWU9MTQ0Mjg2MTE5OSZub25jZT0wLjA0Njg2NTQ5NTEzNzc2Njk0NCZleHBpcmVfdGltZT0xNDQ1NDUzMTA2JmNvbm5lY3Rpb25fZGF0YT1Cb2I=';
+    
+      var chatWidget = new OT.TextChat.ChatWidget({ container: '#chat' });
+      var session = OT.initSession(apiKey, sessionId);
+
+      function connect(token) {
+        disableButtons();
+        session.connect(token, function (err) {
+          if (!err) {
+            chatWidget.start({ session: session });
+            showConnection();
+          }
+          else {
+            console.error(err);
+            enableButtons();
+          }
+        });
+      }
+
+      function showConnection() {
+        var connectedAs = document.getElementById('connected-as');
+        connectedAs.textContent = 'Connected as ' + session.connection.data;
+      }
+
+      function disableButtons() {
+        setButtons(false);
+      }
+
+      function enableButtons() {
+        setButtons(true);
+      }
+
+      function setButtons(isEnabled) {
+        var connectedAs = document.getElementById('connected-as');
+        var buttons = connectedAs.querySelectorAll('button');
+        buttons = Array.prototype.slice.call(buttons);
+        buttons.forEach(function (button) { button.disabled = !isEnabled; });
+      }
+
+    </script>
+  </body>
+</html>

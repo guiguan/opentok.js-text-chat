@@ -1,0 +1,29 @@
+{
+  "name": "opentok-textchat",
+  "version": "0.1.0",
+  "description": " A text chat component for OpenTok",
+  "main": "dist/opentok-textchat.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "opentok",
+    "chat",
+    "text",
+    "webrtc"
+  ],
+  "author": "Salvador de la Puente <salva@unoyunodiez.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "browser-sync": "^2.9.4",
+    "browserify": "^11.1.0",
+    "gulp": "^3.9.0",
+    "rimraf": "^2.4.3",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  }
+}
