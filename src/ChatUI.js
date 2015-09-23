@@ -22,10 +22,6 @@ var bubbleLayout = [
   '</div>'
 ].join('\n');
 
-function later(func) {
-  return function() { setTimeout(func()); };
-}
-
 function ChatUI(options) {
   options = options || {};
   this.senderId = options.senderId || ('' + Math.random()).substr(2);
@@ -67,11 +63,8 @@ ChatUI.prototype = {
     this._errorZone = errorZone;
 
     this._sendButton.onclick = this._sendMessage.bind(this);
-
-    // We need to count after handling the event
-    var lateUpdateCharCounter = later(this._updateCharCounter.bind(this));
-    this._composer.onkeydown = lateUpdateCharCounter;
-    this._composer.onchange = lateUpdateCharCounter;
+    this._composer.onkeyup = this._updateCharCounter.bind(this);
+    this._composer.onkeydown = this._controlComposerInput.bind(this);
 
     parent.appendChild(chatView);
   },
@@ -104,7 +97,7 @@ ChatUI.prototype = {
               _this.senderAlias,
               contents
             ));
-            _this._composer.textContent = '';
+            _this._composer.value = '';
             _this._updateCharCounter();
           }
           _this.enableSending();
@@ -131,6 +124,14 @@ ChatUI.prototype = {
     this._errorZone.hidden = false;
   },
 
+  _controlComposerInput: function (evt) {
+    var isEnter = evt.which === 13 || evt.keyCode === 13;
+    if (!evt.shiftKey && isEnter) {
+      evt.preventDefault();
+      this._sendMessage();
+    }
+  },
+
   _updateCharCounter: function () {
     var remaining = this.maxTextLength - this._composer.value.length;
     var isValid = remaining >= 0;
@@ -146,10 +147,13 @@ ChatUI.prototype = {
 
   enableSending: function () {
     this._sendButton.removeAttribute('disabled');
+    this._composer.removeAttribute('disabled');
+    this._composer.focus();
   },
 
   disableSending: function () {
     this._sendButton.disabled = true;
+    this._composer.disabled = true;
   },
 
   _shouldGroup: function (message) {
