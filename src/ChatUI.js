@@ -4,7 +4,7 @@ var uiLayout = [
   '<div class="ot-input">',
   '  <p class="ot-error-zone" hidden>Error sending the message!</p>',
   '  <div>',
-  '    <div class="ot-composer" contenteditable="true"></div>',
+  '    <textarea placeholder="Write here&hellip;" class="ot-composer"></textarea>',
   '    <div class="ot-bottom-line">',
   '      <p class="ot-character-counter"><span></span> characters left</p>',
   '      <button class="ot-send-button">Send ›</button>',
@@ -21,6 +21,10 @@ var bubbleLayout = [
   '  </header>',
   '</div>'
 ].join('\n');
+
+function later(func) {
+  return function() { setTimeout(func()); };
+}
 
 function ChatUI(options) {
   options = options || {};
@@ -63,14 +67,18 @@ ChatUI.prototype = {
     this._errorZone = errorZone;
 
     this._sendButton.onclick = this._sendMessage.bind(this);
-    this._composer.onkeydown = this._updateCharCounter.bind(this);
+
+    // We need to count after handling the event
+    var lateUpdateCharCounter = later(this._updateCharCounter.bind(this));
+    this._composer.onkeydown = lateUpdateCharCounter;
+    this._composer.onchange = lateUpdateCharCounter;
 
     parent.appendChild(chatView);
   },
 
   _sendMessage: function () {
     var _this = this;
-    var contents = this._composer.textContent;
+    var contents = this._composer.value;
 
     if (contents.length > _this.maxTextLength) {
       _this._showTooLongTextError();
@@ -124,7 +132,7 @@ ChatUI.prototype = {
   },
 
   _updateCharCounter: function () {
-    var remaining = this.maxTextLength - this._composer.textContent.length;
+    var remaining = this.maxTextLength - this._composer.value.length;
     var isValid = remaining >= 0;
     this._charCounter.classList[!isValid ? 'add' : 'remove']('error');
     this._charCounter.textContent = remaining;
