@@ -145,6 +145,10 @@ ChatUI.prototype = {
     this._messages.push(message);
   },
 
+  render: function (raw, isGrouping) {
+    return raw.replace(/(\r\n|\r|\n)/g, '<br/>');
+  },
+
   enableSending: function () {
     this._sendButton.removeAttribute('disabled');
     this._composer.removeAttribute('disabled');
@@ -166,7 +170,8 @@ ChatUI.prototype = {
   },
 
   _groupBubble: function (message) {
-    this._lastBubble.appendChild(this._getBubbleContent(message.text));
+    var contents = this.render(message.text, true);
+    this._lastBubble.appendChild(this._getBubbleContent(contents));
     this._lastTimestamp.textContent = this._humanize(message.dateTime);
   },
 
@@ -208,7 +213,8 @@ ChatUI.prototype = {
     sender.textContent = message.senderAlias;
 
     // Content
-    wrapper.appendChild(this._getBubbleContent(message.text));
+    var contents = this.render(message.text, false);
+    wrapper.appendChild(this._getBubbleContent(contents));
 
     // Timestamp
     timestamp.dateTime = message.dateTime.toISOString();

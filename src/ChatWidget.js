@@ -30,7 +30,6 @@ ChatWidget.prototype = {
   },
 
   onMessageReceived: function (contents, from) {
-    contents = contents.replace(/\n/g, '<br/>');
     var message = new ChatMessage(from.connectionId, from.data, contents);
     this._chatBox.addMessage(message);
   }
