@@ -253,7 +253,7 @@ ChatUI.prototype = {
 
   _getBubbleContent: function (safeHtml) {
     var div = document.createElement('DIV');
-    div.classList.add('ot-bubble-content');
+    div.classList.add('ot-message-content');
     div.innerHTML = safeHtml;
     return div;
   },

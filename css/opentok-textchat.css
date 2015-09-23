@@ -1,9 +1,11 @@
 .ot-textchat {
-  font-family: sans-serif;
-  background-color: #F8F8F8;
+  font-family: 'Muli', sans-serif;
+  background-color: #EEE;
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
   overflow: hidden;
+  color: #333;
+  font-size: 1em;
 }
 
 .ot-textchat * {
@@ -14,7 +16,7 @@
 .ot-textchat .ot-bubbles {
   position: relative;
   margin-bottom: 1em;
-  height: calc(100% - 14em);
+  height: calc(100% - 20em);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -24,10 +26,9 @@
  * the special case is the local participan.
  */
 .ot-textchat .ot-bubble {
-  background-color: #A186BE;
-  color: #FFF;
-  margin-left: 0.7em;
-  border-bottom: 0.2em solid #DDD;
+  background-color: #F8F8F8;
+  margin-left: 1em;
+  border-bottom: 0.2em solid #ECEBEB;
   white-space: nowrap;
 }
 
@@ -53,8 +54,7 @@
  */
 .ot-textchat .ot-bubble.mine > div {
   width: calc(100% - 1.2em - 2em);
-  background-color: #FFF;
-  color: #444;
+  background-color: #EEE;
   padding-right: 1em;
 }
 
@@ -65,7 +65,7 @@
   border: 0.6em solid transparent;
   border-left: none;
   border-right-width: 0.8em;
-  border-right-color: #A186BE;
+  border-right-color: #F8F8F8;
   /* move outside the box */
   position: relative;
   left: -0.7em;
@@ -86,16 +86,16 @@
   border: 0.6em solid transparent;
   border-right: none;
   border-left-width: 0.8em;
-  border-left-color: #FFF;
+  border-left-color: #EEE;
   /* move outside the box */
   position: relative;
   right: 0.8em;
 }
 
 .ot-textchat .ot-bubble-header {
-  font-size: 1.1em;
+  font-size: 1.4em;
   overflow: auto;
-  margin-bottom: 1em;
+  margin-bottom: 1.6em;
 }
 
 .ot-textchat .ot-message-sender {
@@ -104,6 +104,11 @@
 
 .ot-textchat .ot-message-timestamp {
   float: right;
+}
+
+.ot-textchat .ot-message-content {
+  font-size: 1.4em;
+  margin-bottom: 1.3em;
 }
 
 .ot-textchat .ot-input {
@@ -119,7 +124,7 @@
   background-color: #fff;
   box-sizing: border-box;
   font-family: sans-serif;
-  font-size: 1em;
+  font-size: 1.4em;
   line-height: 1.5em;
   outline: none;
   overflow: auto;
@@ -131,32 +136,33 @@
   position: absolute;
   left: 0;
   right: 0;
-  transform: translateY(calc(-100% - 1em));
+  height: 2em;
+  background-color: #F8F8F8;
+  transform: translateY(calc(-100%));
+  text-align: center;
 }
 
 .ot-textchat .ot-error-zone {
-  color: #D00;
-  background-color: #FFF2F2;
-  border: 1px solid #D00;
+  color: #EE2E08;
 }
 
 .ot-textchat .ot-new-messages {
-  background-color: #F8F8F8;
-  text-align: center;
+  color: #888;
 }
 
 .ot-textchat .ot-bottom-line {
   overflow: auto;
-  color: #949494;
 }
 
 .ot-textchat .ot-character-counter {
   float: left;
   margin: 1em 0;
+  line-height: 2.1em;
+  font-size: 1.1em;
 }
 
 .ot-textchat .ot-character-counter.error {
-  color: #D00;
+  color: #EE2E08;
 }
 
 .ot-textchat .ot-send-button {
@@ -164,9 +170,13 @@
   border: none;
   outline: none;
   float: right;
-  margin: 1em 0;
-  font-size: inherit;
+  padding: 1em;
+  font-size: 1.3em;
   color: inherit;
+}
+
+.ot-textchat .ot-send-button:hover {
+  background-color: #f4f4f4;
 }
 
 .ot-textchat .ot-send-button[disabled] {
