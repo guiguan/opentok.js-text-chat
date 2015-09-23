@@ -8,7 +8,7 @@ var links = /https?\:\/\/[^.]+\..+/g;
 function ChatWidget(options) {
   options = options || {};
   this._chatBox = new ChatUI(options);
-  this._chatBox.render = this.render.bind(this);
+  this._chatBox.renderMessage = this.renderMessage.bind(this);
   this._chatBox.disableSending();
   if (options.session) {
     this.start(options);
@@ -38,7 +38,7 @@ ChatWidget.prototype = {
     this._chatBox.addMessage(message);
   },
 
-  render: function (raw) {
+  renderMessage: function (raw) {
     var output;
 
     // Allow multiline
