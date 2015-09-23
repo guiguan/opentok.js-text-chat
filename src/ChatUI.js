@@ -1,13 +1,17 @@
+'use strict';
 
 var uiLayout = [
-  '<div class="ot-bubbles"></div>',
+  '<div class="ot-bubbles">',
+  '</div>',
   '<div class="ot-input">',
-  '  <p class="ot-error-zone" hidden>Error sending the message!</p>',
   '  <div>',
-  '    <textarea placeholder="Write here&hellip;" class="ot-composer"></textarea>',
+  '    <p class="ot-error-zone" hidden>Error sending the message!</p>',
+  '    <p class="ot-new-messages" hidden>▾&nbsp;New messages</p>',
+  '    <textarea placeholder="Send a message&hellip;" class="ot-composer">' +
+  '</textarea>',
   '    <div class="ot-bottom-line">',
   '      <p class="ot-character-counter"><span></span> characters left</p>',
-  '      <button class="ot-send-button">Send ›</button>',
+  '      <button class="ot-send-button">Send&nbsp;⟩</button>',
   '    </div>',
   '  </div>',
   '</div>'
@@ -29,6 +33,7 @@ function ChatUI(options) {
   this.maxTextLength = options.maxTextLength || 1000;
   this.groupDelay = options.groupDelay || (2 * 60 * 1000); // 2 min
   this.timeout = options.timeout || 5000;
+  this._watchScrollAtTheBottom = this._watchScrollAtTheBottom.bind(this);
   this._messages = [];
   this._setupTemplates();
   this._setupUI(options.container);
@@ -55,18 +60,29 @@ ChatUI.prototype = {
     var composer = chatView.querySelector('.ot-composer');
     var charCounter = chatView.querySelector('.ot-character-counter > span');
     var errorZone = chatView.querySelector('.ot-error-zone');
+    var newMessages = chatView.querySelector('.ot-new-messages');
 
     this._composer = composer;
     this._sendButton = sendButton;
     this._charCounter = charCounter;
     this._bubbles = chatView.firstElementChild;
     this._errorZone = errorZone;
+    this._newMessages = newMessages;
 
+    // XXX: It's already bound in the constructor
+    this._bubbles.onscroll = this._watchScrollAtTheBottom;
     this._sendButton.onclick = this._sendMessage.bind(this);
     this._composer.onkeyup = this._updateCharCounter.bind(this);
     this._composer.onkeydown = this._controlComposerInput.bind(this);
+    this._newMessages.onclick = this._goToNewMessages.bind(this);
 
     parent.appendChild(chatView);
+  },
+
+  _watchScrollAtTheBottom: function () {
+    if (this._isAtBottom()) {
+      this._hideNewMessageAlert();
+    }
   },
 
   _sendMessage: function () {
@@ -82,7 +98,7 @@ ChatUI.prototype = {
         _this.disableSending();
 
         var timeout = setTimeout(function () {
-          _this.showError();
+          _this._showError();
           _this.enableSending();
         }, _this.timeout);
 
@@ -99,6 +115,7 @@ ChatUI.prototype = {
             ));
             _this._composer.value = '';
             _this._updateCharCounter();
+            _this._hideErrors();
           }
           _this.enableSending();
         });
@@ -108,7 +125,19 @@ ChatUI.prototype = {
   },
 
   _showTooLongTextError: function () {
-    this._charCounter.classList.add('error');
+    this._charCounter.parentElement.classList.add('error');
+  },
+
+  _hideTooLongTextError: function () {
+    this._charCounter.parentElement.classList.remove('error');
+  },
+
+  _showNewMessageAlert: function () {
+    this._newMessages.removeAttribute('hidden');
+  },
+
+  _hideNewMessageAlert: function () {
+    this._newMessages.hidden = true;
   },
 
   _showError: function () {
@@ -117,7 +146,7 @@ ChatUI.prototype = {
 
   _hideErrors: function () {
     this._errorZone.hidden = true;
-    this._charCounter.classList.remove('error');
+    this._hideTooLongTextError();
   },
 
   _showError: function () {
@@ -132,16 +161,33 @@ ChatUI.prototype = {
     }
   },
 
+  _goToNewMessages: function () {
+    this._scrollToBottom();
+    this._hideNewMessageAlert();
+  },
+
   _updateCharCounter: function () {
     var remaining = this.maxTextLength - this._composer.value.length;
     var isValid = remaining >= 0;
-    this._charCounter.classList[!isValid ? 'add' : 'remove']('error');
+    if (isValid) {
+      this._hideTooLongTextError();
+    }
+    else {
+      this._showTooLongTextError();
+    }
     this._charCounter.textContent = remaining;
   },
 
   addMessage: function (message) {
     var shouldGroup = this._shouldGroup(message);
+    var shouldScroll = this._shouldScroll();
     this[ shouldGroup ? '_groupBubble' : '_addNewBubble' ](message);
+    if (shouldScroll) {
+      this._scrollToBottom();
+    }
+    else {
+      this._showNewMessageAlert();
+    }
     this._messages.push(message);
   },
 
@@ -169,10 +215,23 @@ ChatUI.prototype = {
     return false;
   },
 
+  _shouldScroll: function () {
+    return this._isAtBottom();
+  },
+
+  _isAtBottom: function () {
+    var bubbles = this._bubbles;
+    return bubbles.scrollHeight - bubbles.scrollTop === bubbles.clientHeight;
+  },
+
+  _scrollToBottom: function () {
+    this._bubbles.scrollTop = this._bubbles.scrollHeight;
+  },
+
   _groupBubble: function (message) {
     var contents = this.render(message.text, true);
     this._lastBubble.appendChild(this._getBubbleContent(contents));
-    this._lastTimestamp.textContent = this._humanize(message.dateTime);
+    this._lastTimestamp.textContent = this.humanizeDate(message.dateTime);
   },
 
   _addNewBubble: function (message) {
@@ -218,13 +277,18 @@ ChatUI.prototype = {
 
     // Timestamp
     timestamp.dateTime = message.dateTime.toISOString();
-    timestamp.textContent = this._humanize(message.dateTime);
+    timestamp.textContent = this.humanizeDate(message.dateTime);
 
     return bubble;
   },
 
-  _humanize: function (date) {
-    return date.toUTCString();
+  humanizeDate: function (date) {
+    var hours = date.getHours();
+    var isAM = hours < 12;
+    var hours12 = hours > 12 ? hours - 12 : hours;
+    var minutes = date.getMinutes();
+    minutes = (minutes < 10 ? '0' : '') + minutes;
+    return hours + ':' + minutes + (isAM ? ' AM' : ' PM');
   }
 };
 

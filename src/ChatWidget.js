@@ -1,3 +1,4 @@
+'use strict';
 
 import Chat from './Chat';
 import { ChatUI, ChatMessage } from './ChatUI';

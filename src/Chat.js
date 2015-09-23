@@ -1,3 +1,4 @@
+'use strict';
 
 function Chat(options) {
   if (!options || !options.session) { throw new Error('No session provided.'); }
