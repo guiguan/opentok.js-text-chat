@@ -1,11 +1,18 @@
+@import url(https://fonts.googleapis.com/css?family=Muli:400,300);
+
 .ot-textchat {
   font-family: 'Muli', sans-serif;
-  background-color: #EEE;
-  position: absolute;
-  top: 0; bottom: 0; left: 0; right: 0;
-  overflow: hidden;
-  color: #333;
   font-size: 1em;
+  color: #333;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  
+  background-color: #EEE;
 }
 
 .ot-textchat * {

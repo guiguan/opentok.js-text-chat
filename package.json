@@ -1,7 +1,7 @@
 {
   "name": "opentok-textchat",
   "version": "0.1.0",
-  "description": " A text chat component for OpenTok",
+  "description": "A text chat component for OpenTok",
   "main": "dist/opentok-textchat.js",
   "directories": {
     "test": "test"
@@ -24,6 +24,9 @@
     "gulp": "^3.9.0",
     "rimraf": "^2.4.3",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.4.0"
+    "watchify": "^3.4.0",
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.0"
   }
 }
