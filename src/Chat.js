@@ -7,7 +7,7 @@ define([], function () {
     }
     this._session = options.session;
 
-    var signalName = options.signalName || 'chat';
+    var signalName = options.signalName || 'TextChat';
     this._session.on('signal:' + signalName, this._handleChatSignal.bind(this));
     Object.defineProperty(this, 'signalName', { value: signalName });
   }
