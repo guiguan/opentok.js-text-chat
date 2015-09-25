@@ -1,4 +1,4 @@
-define(['./Chat', './ChatUI'], function (Chat, ChatUIPackage) {
+define(['Chat', 'ChatUI'], function (Chat, ChatUIPackage) {
   'use strict';
 
   var ChatUI = ChatUIPackage.ChatUI;

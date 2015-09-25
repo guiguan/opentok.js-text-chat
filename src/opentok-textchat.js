@@ -1,7 +1,7 @@
 define([
-  './Chat',
-  './ChatUI',
-  './ChatWidget'
+  'Chat',
+  'ChatUI',
+  'ChatWidget'
 ], function (Chat, ChatUIPackage, ChatWidget) {
 
   var ChatUI = ChatUIPackage.ChatUI;
