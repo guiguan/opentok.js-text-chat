@@ -1,4 +1,3 @@
-
 define([], function () {
   'use strict';
 
@@ -6,10 +5,5 @@ define([], function () {
   ChatUIMock.prototype._constructor = sinon.spy();
   ChatUIMock.prototype.disableSending = function () {};
 
-  function ChatMessageMock() {}
-
-  return {
-    ChatUI: ChatUIMock,
-    ChatMessage: ChatMessageMock
-  };
+  return ChatUIMock;
 });

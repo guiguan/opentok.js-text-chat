@@ -10,7 +10,8 @@ define([
 
   var context = newContext({
     'Chat': ChatMock,
-    'ChatUI': ChatUIMock
+    'ChatUI': ChatUIMock,
+    'ChatMessage': function () {}
   });
 
   describe('The ChatWidget class', function () {
@@ -20,12 +21,12 @@ define([
         ChatWidget = module;
         done();
       });
-      ChatUIMock.ChatUI.prototype._constructor.reset();
+      ChatUIMock.prototype._constructor.reset();
     });
 
     it('creates a UI for the widget', function () {
       var widget = new ChatWidget();
-      expect(ChatUIMock.ChatUI.prototype._constructor.called).to.be.true;
+      expect(ChatUIMock.prototype._constructor.called).to.be.true;
     });
   });
 

@@ -1,11 +1,9 @@
 define([
   'Chat',
   'ChatUI',
+  'ChatMessage',
   'ChatWidget'
-], function (Chat, ChatUIPackage, ChatWidget) {
-
-  var ChatUI = ChatUIPackage.ChatUI;
-  var ChatMessage = ChatUIPackage.ChatMessage;
+], function (Chat, ChatUI, ChatMessage, ChatWidget) {
 
   window.OT.TextChat = {
     Chat: Chat,

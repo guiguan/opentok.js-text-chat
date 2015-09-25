@@ -15,14 +15,14 @@ var options = {
 function runKarma(watch, done) {
   new Karma({
     configFile: __dirname + '/tests/karma.conf.js',
-    singleRun: watch
+    singleRun: !watch
   }, done).start();
 }
 
 gulp.task('bundle', function () {
-  return gulp.src('src/opentok-textchat.js')
+  return gulp.src('src/opentok-text-chat.js')
     .pipe(amdOptimize(requireConfig, options))
-    .pipe(concat('opentok-textchat.js'))
+    .pipe(concat('opentok-text-chat.js'))
     .pipe(amdClean.gulp())
     .pipe(gulp.dest('dist'));
 });

@@ -1,8 +1,5 @@
-define(['Chat', 'ChatUI'], function (Chat, ChatUIPackage) {
+define(['Chat', 'ChatUI', 'ChatMessage'], function (Chat, ChatUI, ChatMessage) {
   'use strict';
-
-  var ChatUI = ChatUIPackage.ChatUI;
-  var ChatMessage = ChatUIPackage.ChatMessage;
 
   var links = /https?\:\/\/[^.]+\..+/g;
 

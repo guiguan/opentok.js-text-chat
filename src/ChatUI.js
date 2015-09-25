@@ -1,4 +1,4 @@
-define([], function () {
+define(['ChatMessage'], function (ChatMessage) {
   'use strict';
 
   var uiLayout = [
@@ -289,17 +289,5 @@ define([], function () {
     }
   };
 
-  function ChatMessage(senderId, senderAlias, text) {
-    Object.defineProperties(this, {
-      senderId: { value: senderId },
-      senderAlias: { value: senderAlias },
-      text: { value: text },
-      dateTime: { value: new Date() }
-    });
-  }
-
-  return {
-    ChatUI: ChatUI,
-    ChatMessage: ChatMessage
-  };
+  return ChatUI;
 });
