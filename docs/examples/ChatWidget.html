@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ChatWidget.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>ChatWidget.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'Chat'</span>, <span class="hljs-string">'ChatUI'</span>, <span class="hljs-string">'ChatMessage'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">Chat, ChatUI, ChatMessage</span>) </span>{
+<span class="hljs-pi">  'use strict'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This regular expression detect text fragments looking like URLs.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> links = <span class="hljs-regexp">/https?\:\/\/[^.]+\..+/g</span>;
+
+  <span class="hljs-comment">/**
+   * An HTML widget enabling basic chat capabilities.
+   *
+   * @class ChatWidget
+   * @constructor
+   * @param {Object} [options] A hash with the union of the options for
+   * {{#crossLink "Chat"}}{{/crossLink}} and
+   * {{#crossLink "ChatUI"}}{{/crossLink}} constructors to customize several
+   * aspects of the chat behaviour and internals.
+   * @param {Session} [options.session] If provided, it is an OpenTok connected
+   * `Connection` object and the chat will try to start. If not, only the UI
+   * will be attached to the DOM and it will remain disabled until starting
+   * the chat with {{#crossLink "ChatWidget/start:method"}}{{/crossLink}}.
+   */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>The <code>ChatWidget</code> class combines the <code>ChatUI</code> and <code>ChatMessage</code> UI classes
+plus the <code>Chat</code> library to provide a functional Chat widget.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ChatWidget</span>(<span class="hljs-params">options</span>) </span>{
+    options = options || {};
+    <span class="hljs-keyword">this</span>._chatBox = <span class="hljs-keyword">new</span> ChatUI(options);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Overriding the <code>ChatUI#renderMessage()</code> function you can transform
+the contents of a message before showing them into the conversation.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._chatBox.renderMessage = <span class="hljs-keyword">this</span>.renderMessage.bind(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>By delaying starting the chat we allow the UI to be early attached to
+the DOM. When session is ready, <code>ChatWidget#start()</code> can be called to
+connect to the chat session.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (options.session) {
+      <span class="hljs-keyword">this</span>.start(options);
+    }
+    <span class="hljs-keyword">this</span>._chatBox.disableSending();
+  }
+
+  ChatWidget.prototype = {
+    constructor: ChatWidget,
+
+    <span class="hljs-comment">/**
+     * Starts the chat with an OpenTok session.
+     *
+     * @method start
+     * @param {Object} options Same as the options for
+     * {{#crossLink "Chat"}}{{/crossLink}} constructor. A connected OpenTok
+     * `Session` instance is mandatory.
+     */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Connect the chat to the session provided in the <code>options</code> object. The
+object is passed to the <code>Chat</code> library so you can configure the instance
+in the same object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    start: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">options</span>) </span>{
+      <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>._chat) {
+        <span class="hljs-keyword">this</span>._chat = <span class="hljs-keyword">new</span> Chat(options);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Received messages are handled by the library…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>._chat.onMessageReceived = <span class="hljs-keyword">this</span>.onMessageReceived.bind(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>…while sending messages is something controlled by the UI.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>._chatBox.onMessageReadyToSend =
+          <span class="hljs-keyword">this</span>.onMessageReadyToSend.bind(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>This set the sender information, their id to group messages and their
+alias to show to other users.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>._chatBox.senderId = options.session.connection.connectionId;
+        <span class="hljs-keyword">this</span>._chatBox.senderAlias = options.session.connection.data;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Finally, enable message area and send buttons.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>._chatBox.enableSending();
+      }
+    },
+
+
+    <span class="hljs-comment">/**
+     * Called when the user clicks on the send button. It will received the
+     * contents from the input area and a callback to call once it finishes to
+     * send the message and it can be displayed in the conversation area.
+     *
+     * @method onMessageReadyToSend
+     * @param {String} contents Contents of the input area at the moment the
+     * user clicked on the send button.
+     * @param {Function} callback Function to call once the message is ready
+     * to be displayed in the conversation area (usually after it was
+     * successfully sent). Pass no parameters to denote success and some
+     * error to indicate a failure.
+     */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>After the user click on the send button, simply send the contents through
+the <code>Chat</code> instance.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    onMessageReadyToSend: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">contents, callback</span>) </span>{
+      <span class="hljs-keyword">this</span>._chat.send(contents, callback);
+    },
+
+
+    <span class="hljs-comment">/**
+     * Called when the chat receives a message. It extracts the proper id and
+     * alias from the connection representing the participant that sent the
+     * message and add it to the conversation.
+     *
+     * @method onMessageReceived
+     * @param {String} contents The very same raw contents received through
+     * the chat.
+     * @param {Connection} from The OpenTok connection object representing
+     * the participant sending the message.
+     */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>After a message is received, simply create a new <code>ChatMessage</code> instance
+and add it to the UI.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    onMessageReceived: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">contents, from</span>) </span>{
+      <span class="hljs-keyword">var</span> message = <span class="hljs-keyword">new</span> ChatMessage(from.connectionId, from.data, contents);
+      <span class="hljs-keyword">this</span>._chatBox.addMessage(message);
+    },
+
+    <span class="hljs-comment">/**
+     * Transform the text from the message into the actual content to be
+     * displayed. This case allow multiline messages and recognize urls.
+     *
+     * @method renderMessage
+     * @param {String} raw The original message contents.
+     */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Transformations implemented by the default widget include detecting URLs
+and allowing multiline messages.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    renderMessage: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">raw</span>) </span>{
+      <span class="hljs-keyword">var</span> output;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Allow multiline</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      output = raw.replace(<span class="hljs-regexp">/(\r\n|\r|\n)/g</span>, <span class="hljs-string">'&lt;br/&gt;'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Detect links</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      output = output.replace(links, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">href</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'&lt;a href="'</span> + href + <span class="hljs-string">'" target="_blank"&gt;'</span> + href + <span class="hljs-string">'&lt;/a&gt;'</span>;
+      });
+
+      <span class="hljs-keyword">return</span> output;
+    }
+  };
+
+  <span class="hljs-keyword">return</span> ChatWidget;
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
