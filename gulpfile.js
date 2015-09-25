@@ -3,6 +3,9 @@ var amdOptimize = require('gulp-amd-optimizer');
 var concat = require('gulp-concat');
 var amdClean = require('gulp-amdclean');
 var Karma = require('karma').Server;
+var docco = require('gulp-docco');
+var rmrf = require('rimraf');
+var yuidoc = require('gulp-yuidoc');
 
 var requireConfig = {
   baseUrl: __dirname + '/src/'
@@ -35,6 +38,24 @@ gulp.task('tdd', function (done) {
   runKarma(true, done);
 });
 
-gulp.task('dist', ['test', 'bundle']);
+gulp.task('docs:clear', function (done) {
+  rmrf('docs/*', done);
+});
+
+gulp.task('docs:build-examples', ['docs:clear'], function () {
+  return gulp.src('src/ChatWidget.js')
+    .pipe(docco())
+    .pipe(gulp.dest('docs/examples/'));
+});
+
+gulp.task('docs:build-api', ['docs:clear'], function () {
+  return gulp.src('src/**/*.js')
+    .pipe(yuidoc())
+    .pipe(gulp.dest('docs'));
+});
+
+gulp.task('docs', ['docs:build-examples', 'docs:build-api']);
+
+gulp.task('dist', ['test', 'docs', 'bundle']);
 
 gulp.task('default', ['tdd']);
