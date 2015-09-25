@@ -17,9 +17,13 @@ var session = OT.initSession(apiKey, sessionId);
 var chat = new OT.TextChat.ChatWidget({ session: session });
 ```
 
-The `session` key is mandatory but the session object is not required to be connected. Although, if session is not connected, the UI won't allow the user to enter any message.
+The `session` key is mandatory but the session object is not required to be connected. Althought, if session is not connected, the UI won't allow the user to enter any message until connected.
 
-If you're wondering how the chat knows which name to pick for your client chat or maybe you want to customise the widget, take a look at the annotated sources for the `ChatWidget` class.
+If you're wondering how the chat knows which name to pick for your client chat or maybe you want to customise the widget, take a look at [the annotated sources for the `ChatWidget` class](http://cdn.rawgit.com/opentok/opentok-text-chat/master/docs/examples/ChatWidget.html).
+
+## Read the docs
+
+Here you'll find the [complete documentation](https://cdn.rawgit.com/opentok/opentok-text-chat/master/docs/index.html) of the latest version of the library.
 
 ## Using the library
 
