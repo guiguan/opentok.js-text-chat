@@ -1,11 +1,17 @@
+define([
+  './Chat',
+  './ChatUI',
+  './ChatWidget'
+], function (Chat, ChatUIPackage, ChatWidget) {
 
-import Chat from './Chat';
-import { ChatUI, ChatMessage } from './ChatUI';
-import ChatWidget from './ChatWidget';
+  var ChatUI = ChatUIPackage.ChatUI;
+  var ChatMessage = ChatUIPackage.ChatMessage;
 
-OT.TextChat = {
-  Chat: Chat,
-  ChatUI: ChatUI,
-  ChatMessage: ChatMessage,
-  ChatWidget: ChatWidget
-};
+  window.OT.TextChat = {
+    Chat: Chat,
+    ChatUI: ChatUI,
+    ChatMessage: ChatMessage,
+    ChatWidget: ChatWidget
+  };
+
+});
