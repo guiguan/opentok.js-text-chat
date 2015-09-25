@@ -25,7 +25,7 @@ define([
     });
 
     it('creates a UI for the widget', function () {
-      var widget = new ChatWidget();
+      var widget = new ChatWidget({ session: { once: function () {} }});
       expect(ChatUIMock.prototype._constructor.called).to.be.true;
     });
   });

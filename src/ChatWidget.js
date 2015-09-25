@@ -5,35 +5,44 @@ define(['Chat', 'ChatUI', 'ChatMessage'], function (Chat, ChatUI, ChatMessage) {
   var links = /https?\:\/\/[^.]+\..+/g;
 
   /**
-   * An HTML widget enabling basic chat capabilities.
+   * An HTML widget enabling basic chat capabilities. Pass a `session` object
+   * to the `options` hash. It's not mandatory for the session to be connected
+   * but the chat won't allow the user until the session is connected.
    *
    * @class ChatWidget
    * @constructor
-   * @param {Object} [options] A hash with the union of the options for
+   * @param {Object} options A hash with the union of the options for
    * {{#crossLink "Chat"}}{{/crossLink}} and
    * {{#crossLink "ChatUI"}}{{/crossLink}} constructors to customize several
    * aspects of the chat behaviour and internals.
-   * @param {Session} [options.session] If provided, it is an OpenTok connected
-   * `Connection` object and the chat will try to start. If not, only the UI
-   * will be attached to the DOM and it will remain disabled until starting
-   * the chat with {{#crossLink "ChatWidget/start:method"}}{{/crossLink}}.
    */
 
   // The `ChatWidget` class combines the `ChatUI` and `ChatMessage` UI classes
   // plus the `Chat` library to provide a functional Chat widget.
   function ChatWidget(options) {
-    options = options || {};
+    if (!options || !options.session) {
+      throw new Error(
+        'The key session must be present and set to a valid OpenTok session.'
+      );
+    }
+
     this._chatBox = new ChatUI(options);
 
     // Overriding the `ChatUI#renderMessage()` function you can transform
     // the contents of a message before showing them into the conversation.
     this._chatBox.renderMessage = this.renderMessage.bind(this);
 
-    // By delaying starting the chat we allow the UI to be early attached to
-    // the DOM. When session is ready, `ChatWidget#start()` can be called to
-    // connect to the chat session.
-    if (options.session) {
-      this.start(options);
+    // If the session is connected, create the chat session...
+    if (options.session.connection) {
+      this._start(options);
+    }
+    // ...if not, simply wait for the session to be connected, then create
+    // the chat session.
+    else {
+      options.session.once(
+        'sessionConnected',
+        this._start.bind(this, options)
+      );
     }
     this._chatBox.disableSending();
   }
@@ -41,19 +50,8 @@ define(['Chat', 'ChatUI', 'ChatMessage'], function (Chat, ChatUI, ChatMessage) {
   ChatWidget.prototype = {
     constructor: ChatWidget,
 
-    /**
-     * Starts the chat with an OpenTok session.
-     *
-     * @method start
-     * @param {Object} options Same as the options for
-     * {{#crossLink "Chat"}}{{/crossLink}} constructor. A connected OpenTok
-     * `Session` instance is mandatory.
-     */
-
-    // Connect the chat to the session provided in the `options` object. The
-    // object is passed to the `Chat` library so you can configure the instance
-    // in the same object.
-    start: function (options) {
+    // Connect the chat to the session provided in the `options` object.
+    _start: function (options) {
       if (!this._chat) {
         this._chat = new Chat(options);
 

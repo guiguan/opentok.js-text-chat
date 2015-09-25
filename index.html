@@ -41,18 +41,19 @@
       // Add here your API key
       var apiKey = '45327482';
     
-      // The ChatWidget does not need a session to be instantiated creating the
-      // UI. You can start the chat session later.
-      var chatWidget = new OT.TextChat.ChatWidget({ container: '#chat' });
+      // Although you need a initialized session, the ChatWidget does not need
+      // this session to be connected. It will connect the chat to the session
+      // automatically once the session connects.
       var session = OT.initSession(apiKey, sessionId);
+      var chatWidget = new OT.TextChat.ChatWidget({
+        session: session,
+        container: '#chat'
+      });
 
       function connect(token) {
         disableButtons();
         session.connect(token, function (err) {
           if (!err) {
-            // Once connected to the session you can start the chat and that's
-            // all you need to get a complete functional chat.
-            chatWidget.start({ session: session });
             showConnection();
           }
           else {
