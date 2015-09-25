@@ -27,6 +27,36 @@ define(['ChatMessage'], function (ChatMessage) {
     '</div>'
   ].join('\n');
 
+  /**
+   * User interface for a basic chat client.
+   *
+   * The UI display bubbles representing the chat activity in the conversation
+   * area. An input area displays the remaining characters and allows to send
+   * messages by hitting enter or clicking on the send button. To add a normal
+   * break-line you can press the `shift + enter` combination.
+   *
+   * The conversation area groups messages separated no more than 2 minutes
+   * (although this can be configured) and allow the user to review past
+   * history even if receiving new messages.
+   *
+   * The chat UI can be placed inside any element by providing a `container`
+   * and it will fill the container box.
+   *
+   * @class ChatUI
+   * @constructor
+   * @param {Object} [options] Hash with customizing properties.
+   * @param {String} [options.container='body'] CSS selector representing the
+   * container for the chat.
+   * @param {String} [options.senderId] Unique id for this client. It defaults
+   * in a random number.
+   * @param {String} [options.senderAlias='me'] Alias to be displayed for this
+   * client.
+   * @param {Number} [options.maxTextLength=1000] Maximum length of the message.
+   * @param {Number} [options.groupDelay=120000] Time in milliseconds to be
+   * passed for the UI to separate the messages in different bubbles.
+   * @param {Number} [options.timeout=5000] Time in milliseconds before
+   * informing about a malfunction while sending the message.
+   */
   function ChatUI(options) {
     options = options || {};
     this.senderId = options.senderId || ('' + Math.random()).substr(2);
@@ -175,6 +205,12 @@ define(['ChatMessage'], function (ChatMessage) {
       this._charCounter.textContent = remaining;
     },
 
+    /**
+     * Adds a message to the conversation.
+     *
+     * @method addMessage
+     * @param {ChatMessage} message The message to be displayed.
+     */
     addMessage: function (message) {
       var shouldGroup = this._shouldGroup(message);
       var shouldScroll = this._shouldScroll();
@@ -188,16 +224,37 @@ define(['ChatMessage'], function (ChatMessage) {
       this._messages.push(message);
     },
 
+    /**
+     * Transform the message before displaying it in the conversation. The
+     * result of this method is considered safe html so be careful and take
+     * care.
+     *
+     * @method renderMessage
+     * @param {String} raw Original contents recovered from the message.
+     * @param {Boolean} isGrouping If `true` the content will be merged with
+     * the previous bubble.
+     * @return {String} Valid HTML to be displayed in the conversation.
+     */
     renderMessage: function (raw, isGrouping) {
       return raw;
     },
 
+    /**
+     * Enable input area and sending button.
+     *
+     * @method enableSending
+     */
     enableSending: function () {
       this._sendButton.removeAttribute('disabled');
       this._composer.removeAttribute('disabled');
       this._composer.focus();
     },
 
+    /**
+     * Disable input area and sending button.
+     *
+     * @method disableSending
+     */
     disableSending: function () {
       this._sendButton.disabled = true;
       this._composer.disabled = true;
@@ -279,6 +336,13 @@ define(['ChatMessage'], function (ChatMessage) {
       return bubble;
     },
 
+    /**
+     * Called when displaying a message to human format the date.
+     *
+     * @method humanizeDate
+     * @param {Date} date The date from the message.
+     * @return {String} Human friendly representation for the passed date.
+     */
     humanizeDate: function (date) {
       var hours = date.getHours();
       var isAM = hours < 12;

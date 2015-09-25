@@ -50,7 +50,9 @@ gulp.task('docs:build-examples', ['docs:clear'], function () {
 
 gulp.task('docs:build-api', ['docs:clear'], function () {
   return gulp.src('src/**/*.js')
-    .pipe(yuidoc())
+    .pipe(yuidoc({}, {
+      themedir: 'node_modules/yuidocjs/themes/default'
+    }))
     .pipe(gulp.dest('docs'));
 });
 
