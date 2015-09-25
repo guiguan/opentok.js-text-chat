@@ -21,6 +21,18 @@ The `session` key is mandatory but the session object is not required to be conn
 
 If you're wondering how the chat knows which name to pick for your client chat or maybe you want to customise the widget, take a look at [the annotated sources for the `ChatWidget` class](http://cdn.rawgit.com/opentok/opentok-text-chat/master/docs/examples/ChatWidget.html).
 
+## The demo
+
+Go to your OpenTok dashboard and generate a session id and a couple of tokens with different names (i.e. `Alice` and `Bob`). Edit the `index.html` and replace the session id, tokens and put your API key. Then save the file, exit the editor and run:
+
+```
+$ gulp demo
+```
+
+This will start a server allowing you to test the chat component.
+
+Enjoy!
+
 ## Read the docs
 
 Here you'll find the [complete documentation](https://cdn.rawgit.com/opentok/opentok-text-chat/master/docs/index.html) of the latest version of the library.
