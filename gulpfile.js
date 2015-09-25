@@ -6,6 +6,7 @@ var Karma = require('karma').Server;
 var docco = require('gulp-docco');
 var rmrf = require('rimraf');
 var yuidoc = require('gulp-yuidoc');
+var webserver = require('gulp-webserver');
 
 var requireConfig = {
   baseUrl: __dirname + '/src/'
@@ -21,6 +22,14 @@ function runKarma(watch, done) {
     singleRun: !watch
   }, done).start();
 }
+
+gulp.task('demo', function () {
+  gulp.src('.')
+    .pipe(webserver({
+      fallback: 'index.html',
+      open: true
+    }));
+});
 
 gulp.task('bundle', function () {
   return gulp.src('src/opentok-text-chat.js')
