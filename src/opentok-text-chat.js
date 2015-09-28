@@ -5,7 +5,9 @@ define([
   'ChatWidget'
 ], function (Chat, ChatUI, ChatMessage, ChatWidget) {
 
-  window.OT.TextChat = {
+  window.OTSolution = window.OTSolution || {};
+
+  window.OTSolution.TextChat = {
     Chat: Chat,
     ChatUI: ChatUI,
     ChatMessage: ChatMessage,

@@ -10,11 +10,18 @@ $ bower install opentok-text-chat
 
 ## Express chat integration
 
+Include the OpenTok chat component after the OpenTok library:
+
+```html
+<script src="dist/opentok-text-chat.js"></script>
+<link rel="stylesheet" href="css/opentok-textchat.css" />
+```
+
 To setup the chat, you need an already initialised OpenTok session:
 
 ```js
 var session = OT.initSession(apiKey, sessionId);
-var chat = new OT.TextChat.ChatWidget({ session: session });
+var chat = new OTSolution.TextChat.ChatWidget({ session: session });
 ```
 
 The `session` key is mandatory but the session object is not required to be connected. Althought, if session is not connected, the UI won't allow the user to enter any message until connected.
@@ -46,7 +53,7 @@ The chat widget uses the OpenTok Chat library provided as a part of this compone
 To connect chat with a session you use:
 
 ```js
-var chat = new OT.TextChat.Chat({ session: session });
+var chat = new OTSolution.TextChat.Chat({ session: session });
 ```
 
 The `session` parameter is mandatory and it must be a connected session. Not passing a `session` or passing a not connected session results in a runtime exception.
@@ -76,7 +83,7 @@ chat.onMessageReceived = function (contents, from) {
 OpenTok Chat uses the signal API to send messages. The type of the signal defaults to `TextChat` but this can be customized by passing the `signalName` key to the configuration object when instantiating the chat client.
 
 ```js
-var chat = new OT.TextChat.Chat({
+var chat = new OTSolution.TextChat.Chat({
   session: session,
   signalName: 'MyCustomSignal'
 });
