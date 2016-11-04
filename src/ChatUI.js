@@ -275,7 +275,7 @@ define(['ChatMessage'], function (ChatMessage) {
 
     _isAtBottom: function () {
       var bubbles = this._bubbles;
-      return bubbles.scrollHeight - bubbles.scrollTop === bubbles.clientHeight;
+      return Math.abs(bubbles.scrollHeight - bubbles.scrollTop - bubbles.clientHeight) < 1;
     },
 
     _scrollToBottom: function () {

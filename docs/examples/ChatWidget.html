@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'Chat'</span>, <span class="hljs-string">'ChatUI'</span>, <span class="hljs-string">'ChatMessage'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">Chat, ChatUI, ChatMessage</span>) </span>{
-<span class="hljs-pi">  'use strict'</span>;</pre></div></div>
+<span class="hljs-meta">  'use strict'</span>;</pre></div></div>
             
         </li>
         
@@ -141,7 +141,7 @@ the chat session.</p>
   }
 
   ChatWidget.prototype = {
-    constructor: ChatWidget,</pre></div></div>
+    <span class="hljs-attr">constructor</span>: ChatWidget,</pre></div></div>
             
         </li>
         
@@ -286,7 +286,7 @@ and add it to the UI.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    onMessageReceived: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">contents, from</span>) </span>{
-      <span class="hljs-keyword">var</span> message = <span class="hljs-keyword">new</span> ChatMessage(from.connectionId, from.data, contents);
+      <span class="hljs-keyword">var</span> message = <span class="hljs-keyword">new</span> ChatMessage(<span class="hljs-keyword">from</span>.connectionId, <span class="hljs-keyword">from</span>.data, contents);
       <span class="hljs-keyword">this</span>._chatBox.addMessage(message);
     },
 
